@@ -58,7 +58,7 @@ const renderCountry = function (data, className = '') {
   countriesContainer.insertAdjacentHTML('beforeend', html);
   countriesContainer.style.opacity = 1;
 };
-
+/*
 //https://countries-api-836d.onrender.com/countries/
 const getCountryAndNeighbour = function (country) {
   //AJAX call first country
@@ -90,3 +90,14 @@ const getCountryAndNeighbour = function (country) {
 };
 
 getCountryAndNeighbour('denmark');
+*/
+
+const request = fetch('https://restcountries.com/v3.1/name/portugal');
+console.log(request);
+
+const getCountryData = function (country) {
+  fetch(`https://restcountries.com/v3.1/name/${country}`)
+    .then(response => response.json())
+    .then(data => renderCountry(data[0]));
+};
+getCountryData('portugal');
