@@ -91,7 +91,10 @@ const getCountryAndNeighbour = function (country) {
 
 getCountryAndNeighbour('denmark');
 */
-
+const renderError = function (msg) {
+  countriesContainer.insertAdjacentText('beforeend', msg);
+  countriesContainer.style.opacity = 1;
+};
 const request = fetch('https://restcountries.com/v3.1/name/portugal');
 console.log(request);
 
@@ -108,6 +111,13 @@ const getCountryData = function (country) {
       return fetch(`https://restcountries.com/v3.1/alpha/${neighbour}`);
     })
     .then(response => response.json())
-    .then(data => renderCountry(data[0], 'neighbour'));
+    .then(data => renderCountry(data[0], 'neighbour'))
+    .catch(err => {
+      alert(err);
+      renderError(`Something went wrong ${err}`);
+    });
 };
 getCountryData('portugal');
+btn.addEventListener('click', function () {
+  getCountryData('portugal');
+});
