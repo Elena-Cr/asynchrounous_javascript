@@ -226,20 +226,34 @@ const getPosition = function () {
 };
 
 const whereAmI = async function (country) {
-  //Geolocation
-  const pos = await getPosition();
-  const { latitude: lat, longitude: lng } = pos.coords;
-  //Reverse geocoding
-  const resGeo = await fetch(
-    `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}&localityLanguage=en`
-  );
-  const dataGeo = await resGeo.json();
-  //Country data
-  const res = await fetch(
-    `https://restcountries.com/v3.1/name/${dataGeo.countryName}`
-  );
-  const data = await res.json();
-  console.log(data);
-  renderCountry(data[0]);
+  try {
+    //Geolocation
+    const pos = await getPosition();
+    const { latitude: lat, longitude: lng } = pos.coords;
+    //Reverse geocoding
+    const resGeo = await fetch(
+      `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}&localityLanguage=en`
+    );
+    if (!resGeo.ok) throw new Error('Problem getting location data. ');
+    const dataGeo = await resGeo.json();
+    //Country data
+    const res = await fetch(
+      `https://restcountries.com/v3.1/name/${dataGeo.countryName}`
+    );
+    const data = await res.json();
+    console.log(data);
+    renderCountry(data[0]);
+  } catch (err) {
+    console.log(err);
+    renderError(`Something went wrong, ${err.message}`);
+  }
 };
 whereAmI();
+
+// try {
+//   let y = 1;
+//   const x = 2;
+//   x = 3;
+// } catch (err) {
+//   alert(err.message);
+// }
